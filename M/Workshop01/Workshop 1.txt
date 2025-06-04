@@ -1,0 +1,18 @@
+28/05/2025
+En el workshop de hoy primer realizamos la instalacion de Virtual Box y Vagrant
+Luego revisamos desde el administrador de tareas si la virtualizacion está habilitada
+Despues de reiniciar el equipo abrimos un cmd y utlizamos el comando vagrant -v
+Ahora ingresamos a Virtual Terminal y accedemos a las configuraciones de red seleccionamos la red
+Mostramos las propiedades de la red para verificar que tenga la siguiente dirección de red '192.168.56.1' y la mascara de red '255.255.255.0'
+Ahora damos click derecho en el escritorio, despues mostrar mas opciones y selccionamos 'Open Git Bash here'
+Luego en el cmd de git bash utilizamos los comandos 'pwd' para mostrar en la ruta que me encuentro,  'mkdir ISW811' para crear la carpeta ISW811, 'ls', 'ls -la' para mostrar lo que se encuentra en la ruta, 'cd ISW811', 'cd ..' para volver al directorio padre, 'cd' para ir al home, 'mv para modificar un archivo
+Ahora en el directorio webservice utilizamos el comando 'vagrant init debian/bookworm64' para crear nuestro entorno virtual mediante vagrant
+Luego de la instalacion de nuestro entorno en webserver utilizamos el comando 'code Vagrantfile' para abrir el archivo Vagrantfile
+Ahora en el archivo descomentamos la linea 35 y luego cambiamos la ip '192.168.33.10' por '192.168.56.10' y guardamos los cambios
+Ahora utilizamos el comando 'cat Vagrantfile | grep private_network' para verificar si se cambio la ip, 
+Luego de verificar todo utilizamos el comando 'vagrant up' para levantar la maquina virtual en Virtual Box
+Ahora despues de crear la maquina virtual utilizamos el comando 'vagrant ssh' para conectarnos a l amaquina virtual mediante la consola
+Podemos utilizar el comando 'uname -a' para ver la version de linux
+Ahora dentro de la maquina virtual utilizamos el comando 'sudo apt-get update' para realizar la instalación de dependencias legibles para la maquina
+Para instalar el primer programa utilizamos el comando 'sudo apt-get install apache2'
+Ahora en el navegador ingresamos la url https://192.168.56.10/ para ver el server de apache
