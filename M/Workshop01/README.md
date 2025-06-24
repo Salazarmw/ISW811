@@ -35,13 +35,13 @@ Este taller se centró en la instalación de entornos virtuales utilizando **Vir
 2. Comandos utilizados:
 
    ```bash
-   pwd                 # Ver ruta actual
-   mkdir ISW811        # Crear carpeta
-   ls                  # Listar contenido
-   ls -la              # Listar con detalles
-   cd ISW811           # Entrar a carpeta
-   cd ..               # Volver al directorio padre
-   cd                  # Ir al home
+   pwd                   # Ver ruta actual
+   mkdir ISW811          # Crear carpeta
+   ls                    # Listar contenido
+   ls -la                # Listar con detalles
+   cd ISW811             # Entrar a carpeta
+   cd ..                 # Volver al directorio padre
+   cd                    # Ir al home
    mv archivo1 archivo2  # Renombrar/mover archivos
    ```
 
