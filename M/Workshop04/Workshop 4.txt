@@ -1,0 +1,56 @@
+2/07/2025
+Primero en la terminal creamos la carpeta para el workshop04
+Luego desde /VMs/database iniciamos la maquina virtual de la base de datos
+Luego descargamos ' ' y lo agregamos en la ruta /VMs/database
+Ahi mismo descomprimimos la carpeta descargada con el comando 'unzip '
+Dspues de descomprimir el archivo utilizamos el comando 'mv Diagramas Respaldos Northwind
+Despues de mover los archivos eliminamos el archivo comprimido rm Archivo//
+Luego nos conectamos a la maquina virtual
+Accedemos a la carpeta vagrant/Northwind/Respaldos
+Utilizamos el comando show databases para ver la 
+Creamos la base de dtaos cone el siguiente comando Create database Northwind
+Luego cremos un usuario llamado north con el comando create user north identified by 'secret'
+Y le damos todos los privilegios al usuario recien creado con el comando 'grant all privileges on northwind.* to north;
+Luego salimos con el comando quit
+Utilizamos el comando mysql northwind -u north --password=secret para acceder a la base de datos con el usuario creado anteriormente y mostramos las bases de dtaos
+Ahora utilizamos el comando mysql northwind < northwind.sql -u north --password=secret para restaurar el backup descargdo en la DB northwind
+Ahora nos conectamos a la BD y mostramos las tablas
+Ahora debemos descargarmos e instalamos beaver 
+
+Abrimos beaver y creamos una conexion con MariaDB al server host 192.168.56.11, nos conectamos con el usuario 'north' y la contraseña 'secret'
+Ahora editamos la conexion y cambiamos el nombre por 'North'
+Y probamos la conexion con 'select * from customers c;
+Con ctrl+shif+n creamos otra conexion con el mismo server host, el nombre de la DB 30Days, el usuario laravel y contrseña secret
+Ahora cambiamos el nombre de la conexion por el nombre del usuario
+
+Ahora desde la terminal utilizamos el comando mysql northwind < northwind-data.sql -u north --password=secret para restaurar el otro backup descargado en la DB northwind
+Despues verificamos desde beaver que los datos se mustren correctamente
+
+Desde beaver hacemos los siguientes Challenges:
+
+-- Reto 01
+desc inventory_transaction_types
+
+'select itt.id as ´Codigo´,
+    itt.type_name as ´Descripcion´ 
+    from inventory_transaction_types itt;'
+
+-- Reto 02
+desc orders;
+desc employees;
+
+'select concat (e.first_name, ' ', e.last_name) as ´Vendedor´
+        count(1) as ´cantidad´ from orders o
+    join employees e
+        on e.id = o.employees_id
+    group by e.id;'
+
+-- Reto 03
+desc orders;
+desc employees;
+
+'select concat (e.first_name, ' ', e.last_name) as ´Vendedor´
+count(1) as ´cantidad´ from orders o
+join employees e
+on e.id = o.employees_id
+group by e.id;'
