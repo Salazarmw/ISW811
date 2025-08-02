@@ -1,56 +1,101 @@
 2/07/2025
-Primero en la terminal creamos la carpeta para el workshop04
-Luego desde /VMs/database iniciamos la maquina virtual de la base de datos
-Luego descargamos ' ' y lo agregamos en la ruta /VMs/database
-Ahi mismo descomprimimos la carpeta descargada con el comando 'unzip '
-Dspues de descomprimir el archivo utilizamos el comando 'mv Diagramas Respaldos Northwind
-Despues de mover los archivos eliminamos el archivo comprimido rm Archivo//
-Luego nos conectamos a la maquina virtual
-Accedemos a la carpeta vagrant/Northwind/Respaldos
-Utilizamos el comando show databases para ver la 
-Creamos la base de dtaos cone el siguiente comando Create database Northwind
-Luego cremos un usuario llamado north con el comando create user north identified by 'secret'
-Y le damos todos los privilegios al usuario recien creado con el comando 'grant all privileges on northwind.* to north;
-Luego salimos con el comando quit
-Utilizamos el comando mysql northwind -u north --password=secret para acceder a la base de datos con el usuario creado anteriormente y mostramos las bases de dtaos
-Ahora utilizamos el comando mysql northwind < northwind.sql -u north --password=secret para restaurar el backup descargdo en la DB northwind
-Ahora nos conectamos a la BD y mostramos las tablas
-Ahora debemos descargarmos e instalamos beaver 
 
-Abrimos beaver y creamos una conexion con MariaDB al server host 192.168.56.11, nos conectamos con el usuario 'north' y la contraseña 'secret'
-Ahora editamos la conexion y cambiamos el nombre por 'North'
-Y probamos la conexion con 'select * from customers c;
-Con ctrl+shif+n creamos otra conexion con el mismo server host, el nombre de la DB 30Days, el usuario laravel y contrseña secret
-Ahora cambiamos el nombre de la conexion por el nombre del usuario
+1. En la terminal, creamos la carpeta para el workshop04:
+    mkdir ~/Workshop04
 
-Ahora desde la terminal utilizamos el comando mysql northwind < northwind-data.sql -u north --password=secret para restaurar el otro backup descargado en la DB northwind
-Despues verificamos desde beaver que los datos se mustren correctamente
+2. Desde /VMs/database iniciamos la máquina virtual de la base de datos:
+    vagrant up
 
-Desde beaver hacemos los siguientes Challenges:
+3. Descargamos el archivo de respaldo (Archivos Northwind-20250721.zip) y lo agregamos en la ruta /VMs/database.
+
+4. Descomprimimos la carpeta descargada:
+    unzip northwind.zip
+
+5. Movemos los archivos descomprimidos a la carpeta correspondiente:
+    mv Diagramas Respaldos Northwind
+
+6. Eliminamos el archivo comprimido para liberar espacio:
+    rm northwind.zip
+
+7. Nos conectamos a la máquina virtual:
+    vagrant ssh
+
+8. Accedemos a la carpeta de respaldos:
+    cd ~/vagrant/Northwind/Respaldos
+
+9. Iniciamos el cliente de MySQL y mostramos las bases de datos:
+    mysql -u root -p
+    show databases;
+
+10. Creamos la base de datos:
+    CREATE DATABASE northwind;
+
+11. Creamos un usuario llamado 'north':
+    CREATE USER 'north'@'%' IDENTIFIED BY 'secret';
+
+12. Le damos todos los privilegios al usuario recién creado:
+    GRANT ALL PRIVILEGES ON northwind.* TO 'north'@'%';
+
+13. Salimos del cliente de MySQL:
+    quit
+
+14. Accedemos a la base de datos con el usuario creado y mostramos las bases de datos:
+    mysql -u north -p --password=secret
+    show databases;
+
+15. Restauramos el backup descargado en la base de datos northwind:
+    mysql -u north --password=secret northwind < northwind.sql
+
+16. Nos conectamos a la base de datos y mostramos las tablas:
+    mysql -u north --password=secret northwind
+    show tables;
+
+17. Descargamos e instalamos DBeaver (https://dbeaver.io/).
+
+18. Abrimos DBeaver y creamos una conexión con MariaDB al server host 192.168.56.11, usuario 'north', contraseña 'secret'.
+
+19. Editamos la conexión y cambiamos el nombre por 'North'.
+
+20. Probamos la conexión ejecutando:
+    select * from customers;
+
+21. Con Ctrl+Shift+N creamos otra conexión con el mismo server host, nombre de la base de datos '30Days', usuario 'laravel', contraseña 'secret'.
+
+22. Cambiamos el nombre de la conexión por el nombre del usuario.
+
+23. Desde la terminal, restauramos el otro backup descargado en la base de datos northwind:
+    mysql -u north --password=secret northwind < northwind-data.sql
+
+24. Verificamos desde DBeaver que los datos se muestren correctamente.
+
+25. Desde DBeaver realizamos los siguientes retos:
 
 -- Reto 01
-desc inventory_transaction_types
+Mostrar la estructura de la tabla y los tipos de transacción de inventario:
+    desc inventory_transaction_types;
 
-'select itt.id as ´Codigo´,
-    itt.type_name as ´Descripcion´ 
-    from inventory_transaction_types itt;'
+    select itt.id as 'Codigo',
+           itt.type_name as 'Descripcion'
+    from inventory_transaction_types itt;
 
 -- Reto 02
-desc orders;
-desc employees;
+Mostrar la estructura de las tablas y la cantidad de órdenes por vendedor:
+    desc orders;
+    desc employees;
 
-'select concat (e.first_name, ' ', e.last_name) as ´Vendedor´
-        count(1) as ´cantidad´ from orders o
-    join employees e
-        on e.id = o.employees_id
-    group by e.id;'
+    select concat(e.first_name, ' ', e.last_name) as 'Vendedor',
+           count(1) as 'Cantidad'
+    from orders o
+    join employees e on e.id = o.employee_id
+    group by e.id;
 
 -- Reto 03
-desc orders;
-desc employees;
+Repetir la consulta anterior para verificar los datos:
+    desc orders;
+    desc employees;
 
-'select concat (e.first_name, ' ', e.last_name) as ´Vendedor´
-count(1) as ´cantidad´ from orders o
-join employees e
-on e.id = o.employees_id
-group by e.id;'
+    select concat(e.first_name, ' ', e.last_name) as 'Vendedor',
+           count(1) as 'Cantidad'
+    from orders o
+    join employees e on e.id = o.employee_id
+    group by e.id;

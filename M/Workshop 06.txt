@@ -1,0 +1,197 @@
+23/07/2025 - Workshop 06
+
+Ingresamos a /vagrant/ en webserver
+
+usamos mkdir scripts y entramos
+
+usamos touch site-enabler.sh
+
+después usamos code .
+
+usamos touch site-enabler.sh
+
+
+
+
+#!/usr/bin/env bash
+
+VHOST_DIR="/etc/apache2/sites-available"
+
+#Función de ayuda
+
+mostrar_ayuda() {
+    echo "Uso: $0 -d dominio.com"
+    echo "     $0 -- domain dominio.com"
+    exit 1
+}
+
+#Procesar argumentos
+while [[ "$#" -gt 0 ]]; do
+    case "$1" in
+        -d | --domain)
+            DOMAIN="$2"
+            shift 2
+            ;; #BREAK
+
+        -h | --help)
+            mostrar_ayuda
+            exit 0
+            ;;
+        *)
+            echo "Error: Opción desconocida '$1'" >&2
+            exit 1
+            ;;
+    esac
+    shift
+done
+
+#Validar que se haya definido el dominio
+if [ -z "$DOMAIN" ]; then
+echo "Error: Debes especificar un dominio con -d o --domain." >&2
+mostrar_ayuda
+else
+    echo "Procesando el dominio: $DOMAIN"
+fi
+
+
+
+
+Volvemos a vagrant/scripts 
+usamos chmod +x site-enabler.sh
+./site-enabler.sh
+
+eso nos da error como tal
+
+pero usando algo así nos debería funcionar
+
+vagrant@webserver:/vagrant/scripts$ ./site-enabler.sh -d hola.com
+Procesando el dominio: hola.com
+vagrant@webserver:/vagrant/scripts$
+
+
+
+
+Ahora vamos a crear un script que cree los archivos .conf
+y muchas otras cosas más 
+
+
+#!/usr/bin/env bash
+
+VHOST_DIR="/etc/apache2/sites-available"
+CONFS_DIR="/vagrant/confs"
+
+#Función de ayuda
+
+mostrar_ayuda() {
+    echo "Uso: $0 -d dominio.com"
+    echo "     $0 -- domain dominio.com"
+    exit 1
+}
+
+#Procesar argumentos
+while [[ "$#" -gt 0 ]]; do
+    case "$1" in
+        -d | --domain)
+            DOMAIN="$2"
+            shift 2
+            ;; #BREAK
+
+        -l | --Laravel)
+            LARAVEL=true
+            ;;
+
+        -h | --help)
+            mostrar_ayuda
+            exit 0
+            ;;
+        *)
+            echo "Error: Opción desconocida '$1'" >&2
+            exit 1
+            ;;
+    esac
+    shift
+done
+
+#Validar que se haya definido el dominio
+if [ -z "$DOMAIN" ]; then
+echo "Error: Debes especificar un dominio con -d o --domain." >&2
+mostrar_ayuda
+else
+    echo "Procesando el dominio: $DOMAIN"
+fi
+
+
+# Crear el folder de confs
+if [ ! -d "$CONFS_DIR" ]; then
+mkdir -p "$CONFS_DIR"
+    if [ $? -eq 0 ]; then
+    echo "Directorio de $CONFS_DIR creado con exito"
+    else
+    echo "Error al crear el directorio temporal de confs"   
+    exit 1
+    fi
+fi
+
+
+
+# Validamos si se pasó o no el argumento -l o --Laravel
+if [ "$LARAVEL" = true ]; then
+    DOC_ROOT="/vagrant/sites/$DOMAIN/public"
+else
+    DOC_ROOT="/vagrant/sites/$DOMAIN"
+fi
+
+
+# Plantilla para archivos conf
+CONF_TEMPLATE="
+<VirtualHost *:80>
+    ServerName $DOMAIN
+    ServerAlias www.$DOMAIN
+    
+    DirectoryIndex index.php index.html
+    DocumentRoot $DOC_ROOT
+
+    ErrorLog \${APACHE_LOG_DIR}/$DOMAIN-error.log
+    CustomLog \${APACHE_LOG_DIR}/$DOMAIN-access.log combined
+
+    <Directory $DOC_ROOT>
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+</VirtualHost>
+"
+# Crear el archivo temporal
+
+echo "Creando el archivo $DOMAIN.conf"
+echo "$CONF_TEMPLATE" > "$CONFS_DIR/$DOMAIN.conf"
+if [ $? -eq 0 ]; then
+    echo "Archivo .conf creado con éxito"
+else
+    echo "Error al crear el archivo .conf"
+fi
+
+# Mostrar archivos en confs
+echo "Mostrando archivos confs"
+ls -l "$CONFS_DIR"
+echo
+
+# Verificamos que la ruta $DOC_ROOT contenga un index.php o index.html
+# En caso de no existir creamos la carpeta y creamos un index.html con
+# Un boilerplate de html básico, con el mensaje "Hola, mundo"
+
+# Copiamos el archivo .conf recien creado a /etc/apache2/sites-available
+
+
+
+#Habilitar el sitio representado en ese .conf
+
+#Verificamos que no contenga errores con 'sudo apache2ctl -t'
+
+# Recargamos Apache2 para que el nuevo sitio esté disponible
+
+
+
+
+
+Lo del final queda de tarea
